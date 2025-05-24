@@ -15,10 +15,10 @@ class GraphData(BaseModel):
     nodes: List[Node] = Field(..., min_length=1)
     edges: List[Edge] = Field(default_factory=list)
 
-    @field_validator("nodes", mode='before')
+    @field_validator("nodes")
     @classmethod
     def validate_nodes(cls, nodes: List[Node]) -> List[Node]:
-        names = [node["name"] for node in nodes]
+        names = [node.name for node in nodes]
         if len(names) != len(set(names)):
             raise ValueError("Имена узлов должны быть уникальными")
         return nodes

@@ -123,15 +123,15 @@ END;
 $function$
 ;
 
--- DROP FUNCTION public.drop_tables();
+-- DROP PROCEDURE public.drop_tables();
 
-CREATE OR REPLACE FUNCTION public.drop_tables()
- RETURNS void
+CREATE OR REPLACE PROCEDURE public.drop_tables()
  LANGUAGE sql
 AS $function$
 	TRUNCATE graph, edges, nodes RESTART IDENTITY CASCADE;
 $function$
 ;
+
 
 -- DROP FUNCTION public.get_adjacency_list(int4);
 
@@ -143,7 +143,7 @@ DECLARE
     result_out JSON;
 BEGIN
 	IF NOT EXISTS (SELECT 1 FROM graph WHERE graph_id = graph_id_in) THEN
-        RAISE EXCEPTION 'Не найден граф с id %', graph_id_in;
+        RAISE EXCEPTION 'Не найден граф с id %', id_in;
     END IF;
 
     SELECT jsonb_object_agg(
@@ -276,3 +276,4 @@ GRANT USAGE ON SEQUENCE graph_graph_id_seq TO "user";
 GRANT SELECT, INSERT, REFERENCES, DELETE ON TABLE nodes TO "user";
 GRANT USAGE ON SEQUENCE nodes_node_id_seq TO "user";
 ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public GRANT USAGE ON SEQUENCES TO "user";
+

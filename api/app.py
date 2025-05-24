@@ -17,7 +17,8 @@ async def validation_exception_handler(_: Request, exc: RequestValidationError):
         "missing": "Поле обязательно для заполнения",
         "string_too_short": "Имя узла не может быть пустым",
         "too_short": "Граф должен содержать минимум 1 узел",
-        "int_parsing": "Вводимое значение должно быть целым числом"
+        "int_parsing": "Вводимое значение должно быть целым числом",
+        "string_type": "Вводимое значение должно быть строкой"
     }
 
     formatted_errors = []
