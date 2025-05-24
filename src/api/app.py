@@ -1,10 +1,10 @@
 import psycopg2
 from fastapi.exceptions import RequestValidationError
 
-from api.queries import call_func, add_graph_query, is_graph_acyclic
+from src.api.queries import call_func, add_graph_query, is_graph_acyclic
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
-from api.validators import GraphData
+from src.api.validators import GraphData
 from starlette.requests import Request
 
 

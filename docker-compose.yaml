@@ -42,7 +42,8 @@ services:
       - DB_PASSWORD=1357920_egor
       - API_URL=http://web:8080
     volumes:
-      - ./tests:/docker-entrypoint-initdb.d/tests
+      - ./src:/app/src
+      - ./tests:/app/tests
     depends_on:
       web:
         condition: service_started

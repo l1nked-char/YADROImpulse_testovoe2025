@@ -4,7 +4,7 @@ from typing import Optional
 import psycopg2
 import pytest
 from fastapi.testclient import TestClient
-from api.app import app
+from src.api.app import app
 
 
 @pytest.fixture(scope="module")

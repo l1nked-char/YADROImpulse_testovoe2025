@@ -1,5 +1,5 @@
 import psycopg2
-from config import DB_CONFIG
+from src.config import DB_CONFIG
 import json
 from collections import defaultdict
 
