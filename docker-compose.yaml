@@ -41,6 +41,8 @@ services:
       - DB_USER=postgres
       - DB_PASSWORD=1357920_egor
       - API_URL=http://web:8080
+      - DB_POSTGRES_ADMIN=postgres
+      - DB_POSTGRES_PASSWORD=1357920_egor
     volumes:
       - ./src:/app/src
       - ./tests:/app/tests

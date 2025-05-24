@@ -13,7 +13,6 @@ def client():
 
 
 def clear_test_data() -> None:
-    """Вызывает функцию drop_tables() для очистки данных"""
     conn: Optional[psycopg2.extensions.connection] = None
     try:
         conn = psycopg2.connect(
