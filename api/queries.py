@@ -9,10 +9,10 @@ def connect_db():
         conn = psycopg2.connect(**DB_CONFIG)
         return conn
     except psycopg2.Error as _:
-        raise psycopg2.Error("Ошибка подключения к базе")
+        raise psycopg2.Error("Ошибка подключения к базе!")
 
 
-def call_func(func_name: str, *args):
+async def call_func(func_name: str, *args):
     conn = None
     cursor = None
     try:
@@ -23,14 +23,14 @@ def call_func(func_name: str, *args):
         cursor = conn.cursor()
         query: str = f'SELECT * FROM {func_name}(' + ','.join(['%s' for _ in range(len(args))]) + ')'
         cursor.execute(query, args)
-        result_set = cursor.fetchall()[0][0]
+        result_set: dict = cursor.fetchall()[0][0]
         conn.commit()
         cursor.close()
         conn.close()
     except psycopg2.Error as e:
         if conn:
             conn.rollback()
-        raise psycopg2.Error(f"Ошибка PostgreSQL: {e.pgerror.splitlines()[0]}")
+        raise psycopg2.Error(f"{e.pgerror.splitlines()[0]}")
 
     finally:
         if cursor:
@@ -41,7 +41,7 @@ def call_func(func_name: str, *args):
     return result_set
 
 
-def add_graph_query(nodes_data: list[dict], edges_data: list[dict]) -> int:  # запрос на добавление графа
+async def add_graph_query(nodes_data: list[dict], edges_data: list[dict]) -> int:  # запрос на добавление графа
     conn = None
     cursor = None
     try:
@@ -64,7 +64,7 @@ def add_graph_query(nodes_data: list[dict], edges_data: list[dict]) -> int:  # �
     except psycopg2.Error as e:
         if conn:
             conn.rollback()
-        raise psycopg2.Error(f"Ошибка PostgreSQL: {e.pgerror.splitlines()[0]}")
+        raise psycopg2.Error(f"{e.pgerror.splitlines()[0]}")
 
     finally:
         if cursor:
@@ -73,19 +73,10 @@ def add_graph_query(nodes_data: list[dict], edges_data: list[dict]) -> int:  # �
             conn.close()
 
 
-def parse_adjacency_list(nodes: list[dict], edges: list[dict]) -> dict:  # преобразование в список смежности
+def is_graph_acyclic(nodes: list[dict], edges: list[dict]) -> bool:
     adj_list = defaultdict(list)
     for i in edges:
         adj_list[i["source"]].append(i["target"])
-
-    for node in nodes:
-        if adj_list.get(node["name"]) is None:
-            adj_list.update({node["name"]: []})
-    return dict(adj_list.items())
-
-
-def is_graph_acyclic(nodes: list[dict], edges: list[dict]) -> bool:
-    adjacency_list = parse_adjacency_list(nodes, edges)
     # 0 - не проверен, 1 - проверяется сейчас, 2 - проверен
     visited = {node["name"]: 0 for node in nodes}
 
@@ -96,7 +87,7 @@ def is_graph_acyclic(nodes: list[dict], edges: list[dict]) -> bool:
             return True  # проверенный узел
 
         visited[node] = 1  # проверяем сейчас
-        for neighbor in adjacency_list[node]:
+        for neighbor in adj_list[node]:
             if not dfs(neighbor):
                 return False
         visited[node] = 2  # проверили
