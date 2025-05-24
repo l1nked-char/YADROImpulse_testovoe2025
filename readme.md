@@ -40,8 +40,8 @@ Docker-контейнеров: Обеспечивают изолированно
 
 ### 1. Клонируйте репозиторий
 ```bash
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
+git clone [https://github.com/your-username/your-repo.git](https://github.com/l1nked-char/YADROImpulse_testovoe2025.git)
+cd YADROImpulse_testovoe2025
 ```
 
 ### 2. Запустите контейнеры
